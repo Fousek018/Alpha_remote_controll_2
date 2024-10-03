@@ -1,0 +1,68 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Img\Logo.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.3.1" />
+    <PackageReference Include="MaterialDesignThemes" Version="5.1.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+    <PackageReference Include="XamlFlair.WPF" Version="1.2.13" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="MediatR">
+      <HintPath>Library\MediatR.dll</HintPath>
+    </Reference>
+    <Reference Include="Utility.Messaging">
+      <HintPath>Library\Utility.Messaging.dll</HintPath>
+    </Reference>
+    <Reference Include="Utility.Messaging.Protocols">
+      <HintPath>Library\Utility.Messaging.Protocols.dll</HintPath>
+    </Reference>
+    <Reference Include="Utility.Messaging.Serial">
+      <HintPath>Library\Utility.Messaging.Serial.dll</HintPath>
+    </Reference>
+    <Reference Include="Utility.QueueableRequest">
+      <HintPath>Library\Utility.QueueableRequest.dll</HintPath>
+    </Reference>
+    <Reference Include="Utils.Logger">
+      <HintPath>Library\Utils.Logger.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Img\Logo.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Library\MediatR.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Library\Utility.Messaging.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Library\Utility.Messaging.Protocols.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Library\Utility.Messaging.Serial.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Library\Utility.QueueableRequest.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Library\Utils.Logger.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>
