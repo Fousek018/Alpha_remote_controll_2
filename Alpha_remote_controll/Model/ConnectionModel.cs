@@ -6,44 +6,40 @@ namespace Alpha_remote_controll.Model
 {
     public partial class ConnectionModel
     {
+        public string ServerAddress { get;  set; }
+        public int Port { get;  set; }
+        public string DeviceName { get;  set; }
         private ILoggerService _logger;
-        public NetworkStream _stream { get; private set; }
-        public TcpClient _client { get; private set; }
+        public NetworkStream _stream { get;  set; }
+        public TcpClient _client { get;  set; }
 
         public ConnectionModel()
         {
-            
+
         }
-        public async Task Connect(string ServerAddress, int Port)
+        //Main method for connection, passing server address and port as a parametr
+        public async Task<ConnectionModel> ConnectAsync(string serverAddress, int port)
         {
-            if (_client == null)
-            {
-                try
-                {
-                    //New client
-                    _client = new TcpClient();
-                    await _client.ConnectAsync(ServerAddress, Port);
-                    _stream = _client.GetStream();
-                    //myslet na barvy u výstupu
-                   
+              try
+              {
+                ServerAddress = serverAddress; //set server address
+                Port = port;//set port
+                _client = new TcpClient(); // Create a new client for TCP connection
+                await _client.ConnectAsync(ServerAddress, Port); // Connect to the server
+                _stream = _client.GetStream(); // Get the stream for communication, we will use it for sending and receiving messages
+                DeviceName = "Apha connection";
+                return this;
+              }
+              catch (IOException ioEx)
+              {
+                  throw new Exception("Error during communication with server:", ioEx);
+              }
+              catch (Exception ex)
+               {
+                 _client = null; // Release the client
+                 throw new Exception($"Connection failed: {ex.Message}");
 
-                }
-                catch (IOException ioEx)
-                {
-                    throw new Exception("Error during communication with server:", ioEx);
-                }
-                catch (Exception ex)
-                {
-                    _client = null; // Release the client
-                    throw new Exception($"Connection failed: {ex.Message}");
-
-                }
-
-            }
-            else
-            {
-                throw new Exception("Already connected");            
-            }
+               }
         }
     }
 }

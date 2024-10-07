@@ -38,7 +38,6 @@ namespace Alpha_remote_controll
                  .AddSingleton<IMainVM, MainWindowVM>()
                  .AddSingleton<MainWindowVM>()
                  .AddSingleton<ConnectionVM>()
-                 .AddSingleton<ConnectionModel>()
                  .AddSingleton<LogVM>()
                  .AddSingleton<Controll>()
                  .BuildServiceProvider()

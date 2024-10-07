@@ -13,6 +13,8 @@ namespace Alpha_remote_controll.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            // If the string is empty, return Collapsed, otherwise return Visible
+            // Im not using this for now, but it could be useful in the future
             return string.IsNullOrEmpty(value as string) ? Visibility.Collapsed : Visibility.Visible;
         }
 

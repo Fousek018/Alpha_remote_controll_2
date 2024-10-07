@@ -6,53 +6,158 @@
              xmlns:local="clr-namespace:Alpha_remote_controll.View"      
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:xf="clr-namespace:XamlFlair;assembly=XamlFlair.WPF"
+             xmlns:view="clr-namespace:Alpha_remote_controll.View"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid Margin="30">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+        <!--Tab control with connected devices-->
+        <TabControl ItemsSource="{Binding ConnectedDevices}" TabStripPlacement="Bottom">
+            <!--Resources for TabControl-->
+            <TabControl.Resources>
+                <!--Using static resources-->
+                <Style TargetType="{x:Type TabControl}">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type TabControl}">
+                                <Grid KeyboardNavigation.TabNavigation="Local">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+                                    <!-- ScrollViewer kolem hlaviček záložek -->
+                                    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled" Grid.Row="0" >
+                                        <TabPanel x:Name="HeaderPanel"
+                                          Panel.ZIndex="1"
+                                          IsItemsHost="True"
+                                          KeyboardNavigation.TabIndex="1"
+                                          Margin="2,0,0,0" />
+                                    </ScrollViewer>
+                                    <!-- Obsah jednotlivých záložek -->
+                                    <ContentPresenter x:Name="PART_SelectedContentHost"
+                                              Grid.Row="1"
+                                              Margin="{TemplateBinding Padding}"
+                                              ContentSource="SelectedContent" />
+                                </Grid>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </TabControl.Resources>
+            <!--Item template (dynamic generate ) for tab control-->
+            <TabControl.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding DeviceName}" Style="{StaticResource MaterialDesignHeadline6TextBlock}"/>
+                </DataTemplate>
+            </TabControl.ItemTemplate>
+            <TabControl.ContentTemplate>
+                <DataTemplate>
+                    <Grid Margin="0 20 0 0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <!--Main card with main functions-->
+                        <materialDesign:Card Grid.Row="0" Grid.ColumnSpan="2" Grid.RowSpan="2"  x:Name="MainCard"
+                                                 Margin="15"
+                                                 Style="{StaticResource MaterialDesignOutlinedCard}"
+                                                 UniformCornerRadius="15"
+                                                 xf:Animations.PrimaryBinding="{Binding IsFocused, ElementName=ControllCard}"
+                                                 xf:Animations.Primary="{xf:Animate BasedOn={StaticResource SlideFromLeft}, EasingMode=EaseOut, Event=none}">
+                            <materialDesign:Card.Effect>
+                                <DropShadowEffect Color="Black" 
+                                                  ShadowDepth="3" 
+                                                  BlurRadius="20" 
+                                                  Opacity="0.3"/>
+                            </materialDesign:Card.Effect>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="1.5*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
 
-        <Grid Grid.Column="2" Grid.RowSpan="3">
-            <materialDesign:Card>
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
+                                <Grid Grid.ColumnSpan="3" Margin="30 20 30 0">
+                                    <StackPanel>
+                                        <TextBlock Text="{Binding DeviceName}" Style="{StaticResource MaterialDesignHeadline4TextBlock}" FontWeight="Bold" Foreground="White"/>
+                                        <RibbonSeparator Margin="0 5 0 10"/>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="IP: " Style="{StaticResource  MaterialDesignSubtitle1TextBlock}" FontWeight="Medium"  Foreground="White"/>
+                                            <TextBlock Text="{Binding ServerAddress}" Style="{StaticResource  MaterialDesignSubtitle1TextBlock}" Margin="0 0 0 0" VerticalAlignment="Center" Foreground="White"/>
+                                            <TextBlock Text="PORT: " Style="{StaticResource  MaterialDesignSubtitle1TextBlock}" Margin="20 0 0 0" FontWeight="Medium" Foreground="White"/>
+                                            <TextBlock Text="{Binding Port}" Style="{StaticResource MaterialDesignSubtitle1TextBlock}" Margin="0 1 0 0" VerticalAlignment="Center" Foreground="White"/>
+                                        </StackPanel>
 
-                    <Grid Grid.ColumnSpan="2">
-                        <Button Content="{materialDesign:PackIcon Kind=Ruler,Size=30}"
-                                Style="{StaticResource MaterialDesignFloatingActionButton}"
-                                Command="{Binding GetMethodsCommand}" Cursor="Hand"/>
+                                    </StackPanel>
+                                </Grid>
+                                <!--Butons-->
+                                <Grid Grid.Row="2" Grid.ColumnSpan="3" HorizontalAlignment="Stretch">
+                                    <Button Content="Get Values" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="15" materialDesign:ButtonAssist.CornerRadius="10"/>
+                                    <StackPanel VerticalAlignment="Bottom" Margin="10" Orientation="Horizontal" HorizontalAlignment="Right">
+                                        <Button Content="Start Mesure" Margin="5" materialDesign:ButtonAssist.CornerRadius="10" Background="Transparent" BorderBrush="LightGreen" Foreground="White"/>
+                                        <Button Content="{materialDesign:PackIcon Kind=StopCircle}" Style="{StaticResource MaterialDesignFlatSecondaryLightBgButton}" Background="Transparent" Foreground="White"/>
+                                    </StackPanel>
+                                </Grid>
+                            </Grid>
+
+                        </materialDesign:Card>
+                        <!--Card for avaible methods-->
+                        <materialDesign:Card Grid.Row="2" Grid.ColumnSpan="3"
+                                                 Margin="10"
+                                                 Style="{StaticResource MaterialDesignOutlinedCard}"
+                                                 UniformCornerRadius="15">
+                            <materialDesign:Card.Effect>
+                                <DropShadowEffect Color="Black" 
+                                                  ShadowDepth="3" 
+                                                  BlurRadius="20" 
+                                                  Opacity="0.3"/>
+                            </materialDesign:Card.Effect>
+
+
+                        </materialDesign:Card>
+                        <!--Card for text output-->
+                        <materialDesign:Card Grid.Row="0" Grid.Column="3" Grid.RowSpan="2" x:Name="MethodsCard"
+                                                 Margin="10"
+                                                 Style="{StaticResource MaterialDesignOutlinedCard}"
+                                                 UniformCornerRadius="15">
+                            <materialDesign:Card.Effect>
+                                <DropShadowEffect Color="Black" 
+                                                  ShadowDepth="3" 
+                                                  BlurRadius="20" 
+                                                  Opacity="0.3"/>
+                            </materialDesign:Card.Effect>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="auto"/>
+                                </Grid.RowDefinitions>
+
+                                <Grid Grid.Row="0">
+                                    <TextBlock Text="Avible methods" Style="{StaticResource MaterialDesignHeadline6TextBlock}" FontWeight="Bold"
+                                                VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0 30 0 0 " Foreground="White"/>
+                                </Grid>
+                                
+                                <Button Style="{StaticResource  MaterialDesignIconButton}" Content="{materialDesign:PackIcon Kind=SearchAdd,Size=45}" 
+                                    Command="{Binding DataContext.GetMethodsCommand, RelativeSource={RelativeSource AncestorType=TabControl}}"
+                                    CommandParameter="{Binding}"
+                                    VerticalAlignment="Bottom" Margin="0 0 0 10" Grid.Row="2"/>
+                            </Grid>
+
+                        </materialDesign:Card>
                     </Grid>
-                    <Grid Grid.Row="1" Grid.ColumnSpan="2" Grid.RowSpan="4" Margin="13">
-                        <ListView ItemsSource="{Binding Methods}">
-                            <ListView.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding name, FallbackValue= Test}"/>
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
-                        </ListView>
-                    </Grid>
-                    
-                    </Grid>
-            </materialDesign:Card>
-        </Grid>
-        
+                </DataTemplate>
+            </TabControl.ContentTemplate>
+        </TabControl>
     </Grid>
 </UserControl>

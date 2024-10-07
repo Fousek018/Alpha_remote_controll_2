@@ -9,12 +9,13 @@
         xmlns:view="clr-namespace:Alpha_remote_controll.View"
         xmlns:VM="clr-namespace:Alpha_remote_controll.VM"
         xmlns:xf="clr-namespace:XamlFlair;assembly=XamlFlair.WPF"
-
+        
         Icon="pack://application:,,,/img/Logo.jpg"
         Width="1000"
         Title="MainWindow" MaxHeight="900" MaxWidth="1000"
         
-        Style="{StaticResource MaterialDesignWindow}">
+        Style="{StaticResource MaterialDesignWindow}"
+        FontFamily="{materialDesign:NotoFont}">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -27,18 +28,19 @@
 
 
         <TabControl Style="{StaticResource MaterialDesignNavigationRailTabControl}"
-                    Grid.ColumnSpan="2">
+                    Grid.ColumnSpan="2" TabStripPlacement="Left">
+            <TabPanel VerticalAlignment="Center"></TabPanel>
             <TabItem x:Name="ConnectionHeader"
                      Width="auto" Margin="10" Style="{StaticResource MaterialDesignTabItem}"
                      materialDesign:ColorZoneAssist.Mode="PrimaryLight">
-                <TabItem.Header>
-                    <TextBlock Style="{StaticResource MaterialDesignBody1TextBlock}"
+                    <TabItem.Header>
+                        <TextBlock Style="{StaticResource MaterialDesignBody1TextBlock}"
                                Text="Connection"/>
-                </TabItem.Header>
-                <view:ConnectionView xf:Animations.PrimaryBinding="{Binding IsFocused, ElementName=ConnectionHeader}"
+                    </TabItem.Header>
+                    <view:ConnectionView xf:Animations.PrimaryBinding="{Binding IsFocused, ElementName=ConnectionHeader}"
                                      xf:Animations.Primary="{xf:Animate BasedOn={StaticResource SlideFromTop}, EasingMode=EaseOut, Event=none}"/>
-            </TabItem>
-            <TabItem x:Name="ControllCard"
+                </TabItem>
+                <TabItem x:Name="ControllCard"
                      Width="auto" Margin="10" 
                      Style="{StaticResource MaterialDesignTabItem}"
                      materialDesign:ColorZoneAssist.Mode="PrimaryLight">
@@ -49,17 +51,17 @@
                 <view:ControllView xf:Animations.PrimaryBinding="{Binding IsFocused, ElementName=ControllCard}"
                       xf:Animations.Primary="{xf:Animate BasedOn={StaticResource SlideFromTop}, EasingMode=EaseOut, Event=none}"/>
             </TabItem>
-            <TabItem x:Name="LogCard"
+                <TabItem x:Name="LogCard"
                      Width="auto" Margin="10" 
                      Style="{StaticResource MaterialDesignTabItem}"
                      materialDesign:ColorZoneAssist.Mode="PrimaryLight">
-                <TabItem.Header>
-                    <TextBlock Style="{StaticResource MaterialDesignBody1TextBlock}"
+                    <TabItem.Header>
+                        <TextBlock Style="{StaticResource MaterialDesignBody1TextBlock}"
                Text="Log"/>
-                </TabItem.Header>
-                <view:LogView  xf:Animations.PrimaryBinding="{Binding IsFocused, ElementName=LogCard}"
+                    </TabItem.Header>
+                    <view:LogView  xf:Animations.PrimaryBinding="{Binding IsFocused, ElementName=LogCard}"
                                xf:Animations.Primary="{xf:Animate BasedOn={StaticResource SlideFromTop}, EasingMode=EaseOut, Event=none}"/>
-            </TabItem>
+                </TabItem>
         </TabControl>
         <Grid Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" >
             <Rectangle Fill="#FF2196F3" Height="10" VerticalAlignment="Bottom"/>

@@ -17,7 +17,13 @@
             <RowDefinition Height="5*"/>
         </Grid.RowDefinitions>
 
-        <materialDesign:Card Grid.Row="0" Margin="0 0 0 45">
+        <materialDesign:Card Grid.Row="0" Margin="0 0 0 45" UniformCornerRadius="15" Style="{StaticResource MaterialDesignOutlinedCard}">
+            <materialDesign:Card.Effect>
+            <DropShadowEffect Color="Black" 
+                                                  ShadowDepth="3" 
+                                                  BlurRadius="20" 
+                                                  Opacity="0.3"/>
+            </materialDesign:Card.Effect>
             <Grid>
 
                 <Grid.ColumnDefinitions>

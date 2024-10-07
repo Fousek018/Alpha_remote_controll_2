@@ -24,6 +24,8 @@ namespace Alpha_remote_controll.VM
 
         public MainWindowVM()
         {
+            Console.WriteLine($"Received message");
+
             WeakReferenceMessenger.Default.Register<string>(this, (r, m) =>
             {
                 Console.WriteLine($"Received message: {m}");
