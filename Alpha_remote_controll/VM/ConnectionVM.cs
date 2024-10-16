@@ -11,6 +11,7 @@ using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
 using System.Net.Sockets;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -20,7 +21,8 @@ namespace Alpha_remote_controll.VM
     {
         #region Fields
         private ILoggerService _logger;
-        private ConnectionModel? _connectionModel;
+        private IConnectionService _connectionService;
+        private ConnectionDetails? _connectionModel;
 
         #endregion
 
@@ -45,26 +47,23 @@ namespace Alpha_remote_controll.VM
         private bool _IsUdpChecked;
         #endregion
 
-        public ObservableCollection<ConnectionModel> connectedDevices { get; set; } // Collection of connected devices, for multiple connections
+        public ObservableCollection<ConnectionDetails> connectedDevices { get; set; } // Collection of connected devices, for multiple connections
 
-        public ConnectionVM(ILoggerService logger)
+        public ConnectionVM(ILoggerService logger, IConnectionService connectionService)
         {
-            
-            connectedDevices = new ObservableCollection<ConnectionModel>();
+            _connectionService = connectionService;
+            connectedDevices = new ObservableCollection<ConnectionDetails>();
             _logger = logger;
             ServerAddress = "192.168.3.10"; // Default server address
             Port = 1595; // Default port
             IsAddresValid = false;
+
+            //write multiple test device for observable collection connectedDevices
+            
+
+
             OnServerAddressChanged(ServerAddress);
 
-            connectedDevices = new ObservableCollection<ConnectionModel> //temporary data for testing
-            {
-                new ConnectionModel { DeviceName = "Station CreepTest", ServerAddress = "192.168.1.1", Port = 8080 },
-                new ConnectionModel { DeviceName = "Shredder", ServerAddress = "192.168.1.2", Port = 8081, _client = null, _stream = null },
-                new ConnectionModel { DeviceName = "Test", ServerAddress = "192.168.1.2", Port = 8081, _client = null, _stream = null },
-                new ConnectionModel { DeviceName = "Test", ServerAddress = "192.168.1.2", Port = 8081, _client = null, _stream = null },
-                new ConnectionModel { DeviceName = "Test", ServerAddress = "192.168.1.2", Port = 8081, _client = null, _stream = null }
-            };
         }
         #region Methods
         //Send message when property changed with value, not working yet
@@ -101,9 +100,9 @@ namespace Alpha_remote_controll.VM
             { 
                 try
                 {
-                    _connectionModel = new ConnectionModel();
-                    var device = await _connectionModel.ConnectAsync(ServerAddress, Port);
-                    connectedDevices.Add(device); // Add the connected device to the collection, for multiple connections.
+                    _connectionModel = new ConnectionDetails { ServerAddress = ServerAddress, Port = Port, DeviceName = "alphaConnection" };
+                    await _connectionService.ConnectAsync(_connectionModel);
+                    connectedDevices.Add(_connectionModel); // Add the connected device to the collection, for multiple connections.
                     StatusMessage = "Connected to server";
                     _logger.Log("You are connected to Alpha sofware", LogType.Success);
                 }
@@ -112,6 +111,36 @@ namespace Alpha_remote_controll.VM
                     StatusMessage = e.Message;
                     _logger.Log(e.Message, LogType.Error);
                 }
+            }
+        }
+
+        [RelayCommand]
+        public void Disconnect(ConnectionDetails connectionDetails)
+        {
+            if (connectedDevices.Contains(connectionDetails))
+            {
+                try
+                {
+                    // Odpojení zařízení
+                    connectionDetails.Client?.Close(); // Zavření TCP klienta
+                    connectionDetails.Stream?.Close(); // Zavření síťového streamu
+
+                    // Odstranění zařízení z kolekce
+                    connectedDevices.Remove(connectionDetails);
+
+                    StatusMessage = $"Disconnected from {connectionDetails.DeviceName}";
+                    _logger.Log($"Disconnected from {connectionDetails.DeviceName}", LogType.Info);
+                }
+                catch (Exception ex)
+                {
+                    StatusMessage = $"Error disconnecting from {connectionDetails.DeviceName}: {ex.Message}";
+                    _logger.Log($"Error disconnecting from {connectionDetails.DeviceName}: {ex.Message}", LogType.Error);
+                }
+            }
+            else
+            {
+                StatusMessage = "Device not found in connected devices.";
+                _logger.Log("Device not found in connected devices.", LogType.Warning);
             }
         }
 

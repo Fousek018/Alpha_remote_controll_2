@@ -36,8 +36,9 @@ namespace Alpha_remote_controll
                   .AddSingleton<ILoggerService>(provider =>
                         new LoggerService(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "log.xml")))
                  .AddSingleton<IMainVM, MainWindowVM>()
-                 .AddSingleton<MainWindowVM>()
                  .AddSingleton<ConnectionVM>()
+                 .AddSingleton<IConnectionService, ConnectionService>()
+                 .AddTransient<IQueryService, QueryService>()
                  .AddSingleton<LogVM>()
                  .AddSingleton<Controll>()
                  .BuildServiceProvider()

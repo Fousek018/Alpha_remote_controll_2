@@ -135,21 +135,29 @@
                     <DataTemplate>
                         <Grid Width="230">
                             <materialDesign:Card>
-                                <Grid>
+                                <Grid Margin="10 15 10 0">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="4*"/>
                                         <ColumnDefinition Width="*"/>
                                     </Grid.ColumnDefinitions>
-                                    <StackPanel Margin="20" Grid.Column="0">
-                                        <StackPanel Orientation="Horizontal">
-                                            <TextBox Text="{Binding DeviceName}" Style="{StaticResource MaterialDesignDataGridComboBoxEditableTextBox}" FontSize="30" TextWrapping="Wrap"
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+                                    <TextBox Text="{Binding DeviceName}" Grid.Row="0" Grid.ColumnSpan="2" Margin="0 0 0 5" 
+                                             Style="{StaticResource MaterialDesignDataGridComboBoxEditableTextBox}" 
+                                             FontSize="30" TextWrapping="Wrap"
                                                    VerticalAlignment="Center"/>
-                                        </StackPanel>
+
+                                    <StackPanel Grid.Column="0" Grid.Row="1">
                                         <TextBlock Text="{Binding ServerAddress}" Style="{StaticResource MaterialDesignSubtitle1TextBlock}"/>
                                         <TextBlock Text="{Binding Port}" Style="{StaticResource MaterialDesignSubtitle1TextBlock}"/>
                                     </StackPanel>
-                                    <Button Grid.Column="1" VerticalAlignment="Bottom" Margin="0 0 5 5" Style="{StaticResource MaterialDesignIconButton}"
+                                    <Button Grid.Column="1" Grid.Row="1" VerticalAlignment="Bottom" Margin="0 0 5 5" Style="{StaticResource MaterialDesignIconButton}"
                                             Content="{materialDesign:PackIcon Kind=LanDisconnect,Size=30}"
+                                            Command="{Binding DataContext.DisconnectCommand, 
+                                                      RelativeSource={RelativeSource AncestorType=ListView}}" 
+                                            CommandParameter="{Binding}" 
                                             Foreground="PaleVioletRed"/>
                                 </Grid>
                             </materialDesign:Card>

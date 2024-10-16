@@ -27,8 +27,9 @@
         </Grid.RowDefinitions>
 
 
+       
         <TabControl Style="{StaticResource MaterialDesignNavigationRailTabControl}"
-                    Grid.ColumnSpan="2" TabStripPlacement="Left">
+                    Grid.ColumnSpan="2" TabStripPlacement="Right" Background="Transparent">
             <TabPanel VerticalAlignment="Center"></TabPanel>
             <TabItem x:Name="ConnectionHeader"
                      Width="auto" Margin="10" Style="{StaticResource MaterialDesignTabItem}"
@@ -37,6 +38,7 @@
                         <TextBlock Style="{StaticResource MaterialDesignBody1TextBlock}"
                                Text="Connection"/>
                     </TabItem.Header>
+                
                     <view:ConnectionView xf:Animations.PrimaryBinding="{Binding IsFocused, ElementName=ConnectionHeader}"
                                      xf:Animations.Primary="{xf:Animate BasedOn={StaticResource SlideFromTop}, EasingMode=EaseOut, Event=none}"/>
                 </TabItem>
@@ -55,12 +57,12 @@
                      Width="auto" Margin="10" 
                      Style="{StaticResource MaterialDesignTabItem}"
                      materialDesign:ColorZoneAssist.Mode="PrimaryLight">
-                    <TabItem.Header>
-                        <TextBlock Style="{StaticResource MaterialDesignBody1TextBlock}"
+                <TabItem.Header>
+                    <TextBlock Style="{StaticResource MaterialDesignBody1TextBlock}"
                Text="Log"/>
-                    </TabItem.Header>
-                    <view:LogView  xf:Animations.PrimaryBinding="{Binding IsFocused, ElementName=LogCard}"
-                               xf:Animations.Primary="{xf:Animate BasedOn={StaticResource SlideFromTop}, EasingMode=EaseOut, Event=none}"/>
+                </TabItem.Header>
+                <view:LogView  xf:Animations.PrimaryBinding="{Binding IsFocused, ElementName=LogCard}"
+                                   xf:Animations.Primary="{xf:Animate BasedOn={StaticResource SlideFromTop}, EasingMode=EaseOut, Event=none}"/>
                 </TabItem>
         </TabControl>
         <Grid Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" >
@@ -77,9 +79,8 @@
                      HorizontalAlignment="Right" VerticalAlignment="Center" Margin="20"
                      Foreground="#FF323232" />
             <Image Source="pack://application:,,,/img/Logo.jpg" Width="100" HorizontalAlignment="Left" Margin="20 0 0 0"/>
-            
-            <Grid  Visibility="{Binding Status, Converter={StaticResource StringToVisibilityConverter}}"
-                   xf:Animations.Primary="{xf:Animate BasedOn={StaticResource FadeInAndSlideFromBottom}, Event=Visibility}">
+
+            <Grid>
                 <TextBlock Text="{Binding Status}" x:Name="StatusTextBlock"
                            HorizontalAlignment="Center" VerticalAlignment="Center"/>
             </Grid>
